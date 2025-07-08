@@ -4,48 +4,52 @@ from telegram import Bot, Update
 from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters
 from googletrans import Translator
 
-# Настройки
-TOKEN = "8148077100:AAGu5yAI0JgB2dYvWY9idjQAYVWATjvuBq8"
+# 🔐 Telegram Bot Token
+TOKEN = os.environ.get("TELEGRAM_TOKEN") or "8148077100:AAGu5yAI0JgB2dYvWY9idjQAYVWATjvuBq8"
+
+# 🌐 URL для webhook
 WEBHOOK_URL = "https://tarjimonbot-baij.onrender.com/webhook"
 
-# Инициализация
-app = Flask(__name__)
+# 📦 Telegram Bot и Dispatcher
 bot = Bot(token=TOKEN)
 dispatcher = Dispatcher(bot, None, workers=4)
 translator = Translator()
 
-# Обработчик /start
+# ✅ Flask-приложение
+app = Flask(__name__)
+
+# 📍 Обработчик команды /start
 def start(update, context):
     update.message.reply_text("Assalomu alaykum! Matn yuboring, men tarjima qilaman.")
 
-# Обработчик текста
-def translate_message(update, context):
-    text = update.message.text
-    result = translator.translate(text, src='auto', dest='en')
-    update.message.reply_text(f"Tarjima: {result.text}")
+# 📍 Обработчик текста
+def translate_text(update, context):
+    user_text = update.message.text
+    translated = translator.translate(user_text, src='auto', dest='en')
+    update.message.reply_text(f"Tarjima: {translated.text}")
 
-# Регистрируем обработчики
+# ✅ Регистрация обработчиков
 dispatcher.add_handler(CommandHandler("start", start))
-dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, translate_message))
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, translate_text))
 
-# Главная страница (проверка живости)
+# 🟢 Корневая страница
 @app.route('/')
-def index():
-    return 'TarjimonBot is running!'
+def home():
+    return "TarjimonBot is running!"
 
-# Обработка webhook
+# 📥 Webhook приёмник
 @app.route('/webhook', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), bot)
     dispatcher.process_update(update)
-    return 'OK', 200
+    return "ok"
 
-# Установка webhook вручную
+# 🔗 Установка webhook
 @app.route('/setwebhook', methods=['GET'])
 def set_webhook():
     success = bot.set_webhook(WEBHOOK_URL)
-    return f"Webhook set: {success}", 200
+    return f"Webhook set: {success}"
 
-# Запуск Flask-сервера
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# ▶️ Запуск (только локально / для отладки)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
