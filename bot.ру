@@ -25,8 +25,11 @@ def start(update, context):
 # 📍 Обработчик текста
 def translate_text(update, context):
     user_text = update.message.text
-    translated = translator.translate(user_text, src='auto', dest='en')
-    update.message.reply_text(f"Tarjima: {translated.text}")
+    try:
+        translated = translator.translate(user_text, src='auto', dest='en')
+        update.message.reply_text(f"Tarjima: {translated.text}")
+    except Exception as e:
+        update.message.reply_text("Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.")
 
 # ✅ Регистрация обработчиков
 dispatcher.add_handler(CommandHandler("start", start))
