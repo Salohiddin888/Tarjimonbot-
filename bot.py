@@ -9,7 +9,7 @@ from telegram.ext import (
 )
 from googletrans import Translator
 
-TOKEN = "твой_токен"
+TOKEN = "8148077100:AAGu5yAI0JgB2dYvWY9idjQAYVWATjvuBq8"
 
 app = Flask(__name__)
 translator = Translator()
@@ -30,7 +30,7 @@ bot_app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), translate)
 
 
 @app.route("/setwebhook")
-def set_webhook():
+def set_webhook(https://tarjimonbot-baij.onrender.com):
     url = "https://tarjimonbot-baij.onrender.com/webhook"
     bot_app.bot.set_webhook(url)
     return "Webhook set"
