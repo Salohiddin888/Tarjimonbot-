@@ -11,7 +11,7 @@ from telegram.ext import (
 from deep_translator import GoogleTranslator
 
 # Используем переменные окружения в Render
-TOKEN = os.getenv("8148077100:AAGu5yAI0JgB2dYvWY9idjQAYVWATjvuBq8")
+TOKEN = os.getenv("8148077100:AAHhlsOQLcdl1mylBIBX35GbRXK5lsTlYVM")
 BASE_URL = os.getenv("https://tarjimonbot-baij.onrender.com")  # https://tarjimonbot-baij.onrender.com
 WEBHOOK_PATH = "/webhook"
 
